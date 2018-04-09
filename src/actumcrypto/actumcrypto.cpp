@@ -73,7 +73,7 @@ void RewardMinedBlock(CWallet* pwallet, int amount) {
       LogPrintf("SendMoney() : %s\n", strError);
       throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, strError);
   }
-/* MCHN START */
+/*
   string strRejectReason;
   if (!pwallet->CommitTransaction(wtx, reservekey, strRejectReason))
   {
@@ -86,4 +86,5 @@ void RewardMinedBlock(CWallet* pwallet, int amount) {
           throw JSONRPCError(RPC_TRANSACTION_REJECTED, "Error: this transaction was rejected. This may be because you are sharing private keys between nodes, and another node has spent the funds used by this transaction.");
       }
   }
+  */
 }
