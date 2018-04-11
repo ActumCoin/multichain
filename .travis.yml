@@ -112,8 +112,8 @@ matrix:
     - "./autogen.sh"
     - "./configure --with-gui=no --with-libs=no --with-miniupnpc=no"
     - make
-    - ./rename-binaries false
-    - cd tests && yarn && npx mocha && cd ..
+    - ./rename-binaries.sh false
+    - "(cd tests && yarn && npx mocha)"
     before_deploy: ./prepare-for-deploy.sh mac "$TRAVIS_TAG"
     env:
     - BUILD_FOR=Mac
