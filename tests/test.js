@@ -28,7 +28,10 @@ describe('actumcryptod', function() {
 				callbackUsed = true;
 			}
 		});
-		setTimeout(done, 1500);
+		setTimeout(function() {
+			done();
+			callbackUsed = true;
+		}, 1500);
 	});
 	it('should be able to exit', function(done) {
 		this.timeout(2000);
@@ -36,4 +39,5 @@ describe('actumcryptod', function() {
 			done();
 		});
 		multichaind.kill();
+	});
 });
