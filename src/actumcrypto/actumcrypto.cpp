@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void RewardMinedBlock(CWallet* pwallet, double amount) {
+void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
 
   CBitcoinAddress address(pwallet->GetAccountAddress(""));
   if (!address.IsValid())
