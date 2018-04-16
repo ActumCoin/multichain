@@ -6,7 +6,7 @@ using namespace std;
 
 void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
 
-  CBitcoinAddress address(pwallet->GetAccountAddress(""));
+  CBitcoinAddress address(pwallet->GetAccountAddresses(""));
   if (!address.IsValid())
       throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
 
@@ -111,19 +111,7 @@ void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
               }
           }
       }
-      else
-      {
-          strError= "Issuing more units not allowed for this asset: "+params[2].get_str();
-          errorCode=RPC_NOT_ALLOWED;
-          goto exitlbl;
-      }
-  }
-  else
-  {
-      strError= "Asset not found";
-      errorCode=RPC_ENTITY_NOT_FOUND;
-      goto exitlbl;
-  }
+}
 
 
   EnsureWalletIsUnlocked();
