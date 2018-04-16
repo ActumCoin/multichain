@@ -71,30 +71,6 @@ void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
   const unsigned char *elem;
 
   script=lpDetails->GetData(0,&bytes);
-  if(bytes > 0)
-  {
-      if(mc_gState->m_Features->OpDropDetailsScripts())
-      {
-          lpDetailsScript->SetEntity(entity.GetTxID()+MC_AST_SHORT_TXID_OFFSET);
-          err=lpDetailsScript->SetNewEntityType(MC_ENT_TYPE_ASSET,1,script,bytes);
-          if(err)
-          {
-              strError= "Invalid custom fields, too long";
-              goto exitlbl;
-          }
-
-          elem = lpDetailsScript->GetData(0,&elem_size);
-          scriptOpReturn << vector<unsigned char>(elem, elem + elem_size) << OP_DROP;
-          elem = lpDetailsScript->GetData(1,&elem_size);
-          scriptOpReturn << vector<unsigned char>(elem, elem + elem_size) << OP_DROP << OP_RETURN;
-      }
-      else
-      {
-          lpDetailsScript->SetGeneralDetails(script,bytes);
-          elem = lpDetailsScript->GetData(0,&elem_size);
-          scriptOpReturn << OP_RETURN << vector<unsigned char>(elem, elem + elem_size);
-      }
-  }
 
   addresses.push_back(address.Get());
 
