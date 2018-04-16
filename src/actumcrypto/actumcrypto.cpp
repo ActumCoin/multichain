@@ -82,9 +82,8 @@ void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
           {
               CKeyID *lpKeyID=boost::get<CKeyID> (&fromaddresses[0]);
               if(lpKeyID == NULL)
-              {}
-                  strError= "Issuing more units is allowed only from P2PKH addresses";
-                  goto exitlbl;
+              {
+                  throw JSONRPCError(errorCode, "Issuing more units is allowed only from P2PKH addresses");
               }
           }
           else
@@ -105,13 +104,11 @@ void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
               }
               if(!issuer_found)
               {
-                  strError= "Issuing more units for this asset is not allowed from this wallet";
-                  errorCode=RPC_INSUFFICIENT_PERMISSIONS;
-                  goto exitlbl;
+                  throw JSONRPCError(RPC_INSUFFICIENT_PERMISSIONS, "Issuing more units for this asset is not allowed from this wallet");
+              }
               }
           }
       }
-}
 
 
   EnsureWalletIsUnlocked();
@@ -119,13 +116,6 @@ void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
       LOCK (pwalletMain->cs_wallet_send);
 
       SendMoneyToSeveralAddresses(addresses, nAmount, wtx, lpScript, scriptOpReturn,fromaddresses);
-  }
-
-exitlbl:
-
-  if(strError.size())
-  {
-      throw JSONRPCError(errorCode, strError);
   }
 
 }
