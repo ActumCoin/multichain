@@ -1844,7 +1844,7 @@ double GetBlockValue(int nHeight, int nHeightMinedByMe)
 {
 /* MCHN START */
 //    CAmount nSubsidy = 50 * COIN;
-    double nSubsidy = MCP_INITIAL_BLOCK_REWARD;// * COIN;
+    int nSubsidyInt = MCP_INITIAL_BLOCK_REWARD;// * COIN;
     if(nHeight == 1)
     {
         if(MCP_FIRST_BLOCK_REWARD >= 0)
@@ -1853,15 +1853,18 @@ double GetBlockValue(int nHeight, int nHeightMinedByMe)
         }
     }
 /* MCHN END */
-    double halvings = floor(nHeight / Params().SubsidyHalvingInterval());
+    int halvings = nHeight / Params().SubsidyHalvingInterval();
 
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
         return 0;
 
     // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
-    nSubsidy >>= halvings;
-
+    nSubsidyInt >>= halvings;
+  
+    //convert to a double
+    double nSubsidy = (double)nSubsidyInt;
+  
     // Calculate percentage based on previous mined blocks; loyalty
     double percent = (2/15)*pow(0.625, nHeightMinedByMe);
   
