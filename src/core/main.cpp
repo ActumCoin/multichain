@@ -1840,11 +1840,11 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex)
     return true;
 }
 
-CAmount GetBlockValue(int nHeight, int nHeightMinedByMe)
+double GetBlockValue(int nHeight, int nHeightMinedByMe)
 {
 /* MCHN START */
 //    CAmount nSubsidy = 50 * COIN;
-    CAmount nSubsidy = MCP_INITIAL_BLOCK_REWARD;// * COIN;
+    double nSubsidy = MCP_INITIAL_BLOCK_REWARD;// * COIN;
     if(nHeight == 1)
     {
         if(MCP_FIRST_BLOCK_REWARD >= 0)
@@ -1863,7 +1863,7 @@ CAmount GetBlockValue(int nHeight, int nHeightMinedByMe)
     nSubsidy >>= halvings;
 
     // Calculate percentage based on previous mined blocks; loyalty
-    CAmount percent = (2/15)*pow(0.625, nHeightMinedByMe);
+    double percent = (2/15)*pow(0.625, nHeightMinedByMe);
   
     // factor in percentage but cap it at 100%
     nSubsidy *= (percent > 1) ? 1 : percent;
