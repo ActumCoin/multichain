@@ -6,7 +6,7 @@ using namespace std;
 
 void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
 
-  set<CBitcoinAddress>::iterator it = pwallet->GetAccountAddresses("").begin();
+  set<boost::variant<CNoDestination, CKeyID, CScriptID>::iterator it = pwallet->GetAccountAddresses("").begin();
   
   CBitcoinAddress address(*it);
   if (!address.IsValid())
