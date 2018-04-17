@@ -1853,7 +1853,7 @@ double GetBlockValue(int nHeight, int nHeightMinedByMe)
         }
     }
 /* MCHN END */
-    int halvings = nHeight / Params().SubsidyHalvingInterval();
+    double halvings = floor(nHeight / Params().SubsidyHalvingInterval());
 
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
