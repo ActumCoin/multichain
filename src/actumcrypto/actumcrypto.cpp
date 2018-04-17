@@ -6,7 +6,9 @@ using namespace std;
 
 void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
 
-  CBitcoinAddress address(pwallet->GetAccountAddresses("").begin());
+  set<CBitcoinAddress>::iterator it = pwallet->GetAccountAddresses("").begin();
+  
+  CBitcoinAddress address(*it);
   if (!address.IsValid())
       throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
 
