@@ -1849,7 +1849,7 @@ double GetBlockValue(int nHeight, int nHeightMinedByMe)
     {
         if(MCP_FIRST_BLOCK_REWARD >= 0)
         {
-            nSubsidy = MCP_FIRST_BLOCK_REWARD;// * COIN;
+            nSubsidyInt = MCP_FIRST_BLOCK_REWARD;// * COIN;
         }
     }
 /* MCHN END */
