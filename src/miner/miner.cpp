@@ -616,7 +616,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn,CWallet *pwallet,CP
 
         // reward block
         int nHeightMinedByMe = pindexPrev->nHeightMinedByMe + 1;
-        RewardMinedBlock(pwallet, GetBlockValue(nHeight, (double)nHeightMinedByMe));
+        RewardMinedBlock(pwallet, (double)GetBlockValue(nHeight, nHeightMinedByMe));
 
         pblock->vSigner[0]=ppubkey->size();
         memcpy(pblock->vSigner+1,ppubkey->begin(),pblock->vSigner[0]);
