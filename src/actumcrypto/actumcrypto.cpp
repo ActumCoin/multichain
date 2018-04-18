@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void RewardMinedBlock(CWallet* pwallet, CAmount amount) {
+void RewardMinedBlock(CWallet* pwallet, double amount) {
 
   set<boost::variant<CNoDestination, CKeyID, CScriptID> >::iterator it = pwallet->GetAccountAddresses("").begin();
   
