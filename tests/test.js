@@ -15,12 +15,13 @@ describe('actumcryptod', function() {
 	it('should be able to run without writing to stderr', function(done) {
 		this.timeout(2000);
 		let callbackUsed = false;
-		multichaind = spawn(join(__dirname, '../actumcrypto/actumcryptod'), ['test-blockchain'], {stdio: ['pipe', 'pipe', 'inherit']});
+		multichaind = spawn(join(__dirname, '../actumcrypto/actumcryptod'), ['test-blockchain']);
 		multichaind.stderr.on('data', function(data) {
-			if(!callbackUsed) {
-				done(data);
-				callbackUsed = true;
-			}
+            		console.error(data);
+            		if(!callbackUsed) {
+                		done(data);
+                		callbackUsed = true;
+           		 }
 		});
 		multichaind.on('close', (code) => {
 			if(!callbackUsed) {
