@@ -1,6 +1,7 @@
 #include "actumcrypto/actumcrypto.h"
 
 #include <boost/foreach.hpp>
+#include <exception>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   
   CBitcoinAddress address(*it);
   if (!address.IsValid())
-      throw Error(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
+      throw logic_error("Invalid address");
 
   CAmount nAmount = 0;
 
@@ -30,7 +31,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   int64_t quantity = (int64_t)(raw_qty.get_real() * multiple + 0.499999);
   if(quantity<0)
   {
-      throw Error(RPC_INVALID_PARAMETER, "Invalid asset quantity");
+      throw logic_error("Invalid asset quantity");
   }
 
   mc_SetABQuantity(buf,quantity);
@@ -47,7 +48,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
 
   if(!AddressCanReceive(address.Get()))
   {
-      throw Error(RPC_INSUFFICIENT_PERMISSIONS, "Destination address doesn't have receive permission");
+      throw logic_error("Destination address doesn't have receive permission");
   }
 
 
@@ -85,7 +86,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
               CKeyID *lpKeyID=boost::get<CKeyID> (&fromaddresses[0]);
               if(lpKeyID == NULL)
               {
-                  throw Error(errorCode, "Issuing more units is allowed only from P2PKH addresses");
+                  throw logic_error("Issuing more units is allowed only from P2PKH addresses");
               }
           }
           else
@@ -106,7 +107,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
               }
               if(!issuer_found)
               {
-                  throw Error(RPC_INSUFFICIENT_PERMISSIONS, "Issuing more units for this asset is not allowed from this wallet");
+                  throw logic_error("Issuing more units for this asset is not allowed from this wallet");
               }
               }
           }
