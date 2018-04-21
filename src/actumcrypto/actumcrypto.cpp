@@ -10,7 +10,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   
   CBitcoinAddress address(*it);
   if (!address.IsValid())
-      throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
+      throw Error(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
 
   CAmount nAmount = 0;
 
@@ -30,7 +30,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   int64_t quantity = (int64_t)(raw_qty.get_real() * multiple + 0.499999);
   if(quantity<0)
   {
-      throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid asset quantity");
+      throw Error(RPC_INVALID_PARAMETER, "Invalid asset quantity");
   }
 
   mc_SetABQuantity(buf,quantity);
@@ -47,7 +47,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
 
   if(!AddressCanReceive(address.Get()))
   {
-      throw JSONRPCError(RPC_INSUFFICIENT_PERMISSIONS, "Destination address doesn't have receive permission");
+      throw Error(RPC_INSUFFICIENT_PERMISSIONS, "Destination address doesn't have receive permission");
   }
 
 
@@ -85,7 +85,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
               CKeyID *lpKeyID=boost::get<CKeyID> (&fromaddresses[0]);
               if(lpKeyID == NULL)
               {
-                  throw JSONRPCError(errorCode, "Issuing more units is allowed only from P2PKH addresses");
+                  throw Error(errorCode, "Issuing more units is allowed only from P2PKH addresses");
               }
           }
           else
@@ -106,7 +106,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
               }
               if(!issuer_found)
               {
-                  throw JSONRPCError(RPC_INSUFFICIENT_PERMISSIONS, "Issuing more units for this asset is not allowed from this wallet");
+                  throw Error(RPC_INSUFFICIENT_PERMISSIONS, "Issuing more units for this asset is not allowed from this wallet");
               }
               }
           }
