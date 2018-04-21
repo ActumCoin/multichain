@@ -10,8 +10,8 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   set<boost::variant<CNoDestination, CKeyID, CScriptID> >::iterator it = pwallet->GetAccountAddresses("").begin();
   
   CBitcoinAddress address(*it);
-  if (!address.IsValid())
-      throw logic_error("Invalid address");
+  //if (!address.IsValid())
+      //throw logic_error("Invalid address");
 
   CAmount nAmount = 0;
 
@@ -29,10 +29,10 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   Value raw_qty = amount;
 
   int64_t quantity = (int64_t)(raw_qty.get_real() * multiple + 0.499999);
-  if(quantity<0)
-  {
-      throw logic_error("Invalid asset quantity");
-  }
+  //if(quantity<0)
+  //{
+      //throw logic_error("Invalid asset quantity");
+  //}
 
   mc_SetABQuantity(buf,quantity);
 
@@ -46,10 +46,10 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   // Wallet comments
   CWalletTx wtx;
 
-  if(!AddressCanReceive(address.Get()))
-  {
-      throw logic_error("Destination address doesn't have receive permission");
-  }
+  //if(!AddressCanReceive(address.Get()))
+  //{
+     // throw logic_error("Destination address doesn't have receive permission");
+  //}
 
 
   mc_Script *lpDetailsScript=mc_gState->m_TmpBuffers->m_RpcScript1;
@@ -84,10 +84,10 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
           if(fromaddresses.size() == 1)
           {
               CKeyID *lpKeyID=boost::get<CKeyID> (&fromaddresses[0]);
-              if(lpKeyID == NULL)
-              {
-                  throw logic_error("Issuing more units is allowed only from P2PKH addresses");
-              }
+             // if(lpKeyID == NULL)
+              //{
+              //    throw logic_error("Issuing more units is allowed only from P2PKH addresses");
+              //}
           }
           else
           {
@@ -105,10 +105,10 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
                       }
                   }
               }
-              if(!issuer_found)
-              {
-                  throw logic_error("Issuing more units for this asset is not allowed from this wallet");
-              }
+             // if(!issuer_found)
+             // {
+             //     throw logic_error("Issuing more units for this asset is not allowed from this wallet");
+             // }
               }
           }
       }
