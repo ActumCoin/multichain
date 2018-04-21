@@ -17,7 +17,7 @@ describe('actumcryptod', function() {
 		let callbackUsed = false;
 		multichaind = spawn(join(__dirname, '../actumcrypto/actumcryptod'), ['test-blockchain']);
 		multichaind.stderr.on('data', function(data) {
-            		console.error(data);
+            		console.error(data.toString());
             		if(!callbackUsed) {
                 		done(data);
                 		callbackUsed = true;
