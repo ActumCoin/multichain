@@ -1842,17 +1842,7 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex)
 
 double GetBlockValue(int nHeight, int nHeightMinedByMe)
 {
-/* MCHN START */
-//    CAmount nSubsidy = 50 * COIN;
-    int nSubsidyInt = MCP_INITIAL_BLOCK_REWARD;// * COIN;
-    if(nHeight == 1)
-    {
-        if(MCP_FIRST_BLOCK_REWARD >= 0)
-        {
-            nSubsidyInt = MCP_FIRST_BLOCK_REWARD;// * COIN;
-        }
-    }
-/* MCHN END */
+    int nSubsidyInt = 5;
     int halvings = nHeight / Params().SubsidyHalvingInterval();
 
     // Force block reward to zero when right shift is undefined.
@@ -1861,17 +1851,17 @@ double GetBlockValue(int nHeight, int nHeightMinedByMe)
 
     // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
     nSubsidyInt >>= halvings;
-  
+
     //convert to a double
     double nSubsidy = (double)nSubsidyInt;
-  
-    // Calculate percentage based on previous mined blocks; loyalty
-    double percent = (2/15)*pow(0.625, nHeightMinedByMe);
-  
-    // factor in percentage but cap it at 100%
-    nSubsidy *= (percent > 1) ? 1 : percent;
 
-    return nSubsidy;
+    // Calculate percentage based on previous mined blocks; loyalty
+    double p = ((2.0/15.0)*pow(1.625, nHeightMinedByMe));
+
+    // cap percent at 100%
+    double percent = (p > 1) ? 1 : p;
+
+    return percent * nSubsidy;
 }
 
 bool IsInitialBlockDownload()

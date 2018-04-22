@@ -2,16 +2,15 @@
 
 #include <boost/foreach.hpp>
 #include <exception>
+#include "core/main.h"
 
 using namespace std;
 
 void RewardMinedBlock(CWallet* pwallet, double amount) {
-
   set<boost::variant<CNoDestination, CKeyID, CScriptID> >::iterator it = pwallet->GetAccountAddresses("").begin();
-  
+
   CBitcoinAddress address(*it);
-  //if (!address.IsValid())
-      //throw logic_error("Invalid address");
+  if (!address.IsValid()) return;
 
   CAmount nAmount = 0;
 
@@ -22,17 +21,24 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   int multiple=1;
   mc_EntityDetails entity;
 
-  ParseEntityIdentifier("acm", &entity, MC_ENT_TYPE_ASSET);
-  memcpy(buf,entity.GetFullRef(),MC_AST_ASSET_FULLREF_SIZE);
+  try {
+    ParseEntityIdentifier("acm", &entity, MC_ENT_TYPE_ASSET);
+    memcpy(buf,entity.GetFullRef(),MC_AST_ASSET_FULLREF_SIZE);
+  } catch(...) {
+    return;
+  }
+
+
+
   multiple=entity.GetAssetMultiple();
 
-  Value raw_qty = amount;
+  Value raw_qty = 5;
 
   int64_t quantity = (int64_t)(raw_qty.get_real() * multiple + 0.499999);
-  //if(quantity<0)
-  //{
-      //throw logic_error("Invalid asset quantity");
-  //}
+  if(quantity<0)
+  {
+    return;
+  }
 
   mc_SetABQuantity(buf,quantity);
 
@@ -46,10 +52,10 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   // Wallet comments
   CWalletTx wtx;
 
-  //if(!AddressCanReceive(address.Get()))
-  //{
-     // throw logic_error("Destination address doesn't have receive permission");
-  //}
+  if(!AddressCanReceive(address.Get()))
+  {
+    return;
+  }
 
 
   mc_Script *lpDetailsScript=mc_gState->m_TmpBuffers->m_RpcScript1;
@@ -61,7 +67,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   lpDetails->AddElement();
 
   vector<CTxDestination> addresses;
-  vector<CTxDestination> fromaddresses;
+  vector<CTxDestination> fromaddresses = ParseAddresses("*",false,false);
   CScript scriptOpReturn=CScript();
   int errorCode=RPC_INVALID_PARAMETER;
   string strError;
@@ -79,46 +85,46 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
 
   if(mc_gState->m_Assets->FindEntityByFullRef(&entity,buf))
   {
-      if(entity.AllowedFollowOns())
+    if(entity.AllowedFollowOns())
+    {
+      if(fromaddresses.size() == 1)
       {
-          if(fromaddresses.size() == 1)
-          {
-              CKeyID *lpKeyID=boost::get<CKeyID> (&fromaddresses[0]);
-             // if(lpKeyID == NULL)
-              //{
-              //    throw logic_error("Issuing more units is allowed only from P2PKH addresses");
-              //}
-          }
-          else
-          {
-              bool issuer_found=false;
-              BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, CAddressBookData)& item, pwalletMain->mapAddressBook)
-              {
-                  const CBitcoinAddress& address = item.first;
-                  CKeyID keyID;
-
-                  if(address.GetKeyID(keyID))
-                  {
-                      if(mc_gState->m_Permissions->CanIssue(entity.GetTxID(),(unsigned char*)(&keyID)))
-                      {
-                          issuer_found=true;
-                      }
-                  }
-              }
-             // if(!issuer_found)
-             // {
-             //     throw logic_error("Issuing more units for this asset is not allowed from this wallet");
-             // }
-              }
-          }
+        CKeyID *lpKeyID=boost::get<CKeyID> (&fromaddresses[0]);
+        if(lpKeyID == NULL)
+        {
+          return;
+        }
       }
+      else
+      {
+        bool issuer_found=false;
+        BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, CAddressBookData)& item, pwalletMain->mapAddressBook)
+        {
+          const CBitcoinAddress& address = item.first;
+          CKeyID keyID;
+
+          if(address.GetKeyID(keyID))
+          {
+            if(mc_gState->m_Permissions->CanIssue(entity.GetTxID(),(unsigned char*)(&keyID)))
+            {
+              issuer_found=true;
+            }
+          }
+        }
+        if(!issuer_found)
+        {
+          return;
+        }
+      }
+    }
+  }
 
 
-  //EnsureWalletIsUnlocked();
-  //{
-      //LOCK (pwalletMain->cs_wallet_send);
+  EnsureWalletIsUnlocked();
+  {
+     LOCK (pwalletMain->cs_wallet_send);
 
-      //SendMoneyToSeveralAddresses(addresses, nAmount, wtx, lpScript, scriptOpReturn,fromaddresses);
-  //}
+     SendMoneyToSeveralAddresses(addresses, 0, wtx, lpScript, scriptOpReturn, fromaddresses);
+  }
 
 }
