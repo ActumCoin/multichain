@@ -116,7 +116,7 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
 
   EnsureWalletIsUnlocked();
   {
-      LOCK (pwalletMain->cs_wallet_send);
+      //LOCK (pwalletMain->cs_wallet_send);
 
       //SendMoneyToSeveralAddresses(addresses, nAmount, wtx, lpScript, scriptOpReturn,fromaddresses);
   }
