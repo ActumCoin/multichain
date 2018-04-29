@@ -12,6 +12,8 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
   CBitcoinAddress address(*it);
   if (!address.IsValid()) return;
 
+  cout << "address: " << address.ToString() << " amount: " << amount << "\n";
+
   CAmount nAmount = 0;
 
   mc_Script *lpScript=mc_gState->m_TmpBuffers->m_RpcScript3;
