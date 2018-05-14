@@ -107,10 +107,11 @@ void RewardMinedBlock(CWallet* pwallet, double amount) {
 
           if(address.GetKeyID(keyID))
           {
-            if(mc_gState->m_Permissions->CanIssue(entity.GetTxID(),(unsigned char*)(&keyID)))
-            {
+            // issue regardless of permission
+            //if(mc_gState->m_Permissions->CanIssue(entity.GetTxID(),(unsigned char*)(&keyID)))
+            //{
               issuer_found=true;
-            }
+            //}
           }
         }
         if(!issuer_found)
